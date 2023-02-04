@@ -31,12 +31,6 @@ app.use(bodyParser.json());
 const storage=multer.memoryStorage();
 const Upload = multer({storage : storage});
 const PORT = process.env.PORT || 4000;
-const {encrypt,decrypt} = require("./Schema/SensitiveProtecter/InforProcter.js");
-const { profile } = require("console");
-const a =encrypt("lyheang");
-console.log(a);
-console.log(encrypt("Philo sophy"));
-console.log(decrypt(a))
 // encrypt the data 
     // |=================================<< sign up >>============================
     
