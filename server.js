@@ -31,6 +31,12 @@ app.use(bodyParser.json());
 const storage=multer.memoryStorage();
 const Upload = multer({storage : storage});
 const PORT = process.env.PORT || 4000;
+const {encrypt,decrypt} = require("./Schema/SensitiveProtecter/InforProcter.js");
+const { profile } = require("console");
+const a =encrypt("lyheang");
+console.log(a);
+console.log(encrypt("Philo sophy"));
+console.log(decrypt(a))
 // encrypt the data 
     // |=================================<< sign up >>============================
     
@@ -39,6 +45,7 @@ const PORT = process.env.PORT || 4000;
             next();
         }else{
                 req.session.email=req.body.email;
+                req.session.password=req.body.password;
                 let getProfile = JSON.parse(fs.readFileSync("./userprofile.json",{encoding:"utf-8",flag:"r"}));
                 const userProfile = {
                     // dat to send to the userver
@@ -83,17 +90,19 @@ const PORT = process.env.PORT || 4000;
                 let getProfile = JSON.parse(fs.readFileSync("./userprofile.json",{encoding:"utf-8",flag:"r"}));
                 // find one by one user account profile 
                 let findProfile = getProfile.some((profile)=>{
-                   return profile.email === req.body.email
+                   return profile.email === req.body.email && profile.password===req.body.password;
                 });
                 if(findProfile){
                     req.session.email= req.body.email;
+                    req.session.password=req.body.password;
                     res.send("you are login");             
                 }else{
-                    res.send("you credential is not match");
+                    res.json({data: "logedIn"});
                 }
                
             }else{
-                res.send("you already have login");
+                res.json({data: "exist"});
+               // res.send("you already have login");
             }
     })
     // | =============================<< get Profile >> =================================================
